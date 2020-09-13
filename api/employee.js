@@ -43,7 +43,7 @@ employeeRouter.post('/', checkRequirements, (req,res,next) => {
                 if (err) {
                     next(err);
                 } else {
-                    res.status(200).json({ employee: row })
+                    res.status(201).json({ employee: row })
                 }
             })
         }
@@ -104,7 +104,7 @@ employeeRouter.delete('/:employeeId', (req,res,next) => {
                 if (err) {
                     next(err);
                 } else {
-                    res.status(200).json({ employee: row })
+                    res.status(204).json({ employee: row })
                 }
             })
         }
