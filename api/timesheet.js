@@ -1,8 +1,11 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
+const bodyParser = require('body-parser');
+
 const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite')
 
 timesheetRouter = express.Router();
+timesheetRouter.use(bodyParser.json());
 
 timesheetRouter.get('/', (req,res,next) => {
     db.all(`SELECT * FROM Timesheet WHERE employee_id = ${req.params.employeeId};`, (err,rows) => {

@@ -1,10 +1,12 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
-const timesheetRouter = require('./timesheet')
+const timesheetRouter = require('./timesheet');
+const bodyParser = require('body-parser');
 
 const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite')
 
 employeeRouter = express.Router();
+employeeRouter.use(bodyParser.json());
 employeeRouter.use('/timesheets', timesheetRouter);
 
 employeeRouter.get('/', (req,res,next) => {
@@ -19,7 +21,7 @@ employeeRouter.get('/', (req,res,next) => {
 
 const checkRequirements = (req,res,next) => {
     const employee = req.body.employee;
-    if (!employee.name || !employee.position || !employee.age) {
+    if (!employee.name || !employee.position || !employee.wage) {
         res.sendStatus(400);
     } else {
         next();
@@ -100,11 +102,11 @@ employeeRouter.delete('/:employeeId', (req,res,next) => {
         if (err) {
             next(err);
         } else {
-            db.get(`SELECT * FROM Artist WHERE id = ${id}`, (err, row) => {
+            db.get(`SELECT * FROM Employee WHERE id = ${id}`, (err, row) => {
                 if (err) {
                     next(err);
                 } else {
-                    res.status(204).json({ employee: row })
+                    res.status(200).json({ employee: row })
                 }
             })
         }

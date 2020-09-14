@@ -1,4 +1,4 @@
-const sqlite = require('sqlite3');
+const sqlite3 = require('sqlite3');
 
 const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite')
 
@@ -23,7 +23,7 @@ db.serialize(() => {
         title TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT));`);
     db.run(`CREATE TABLE IF NOT EXISTS MenuItem (
-        id TEXT NOT NULL,
+        id INTEGER NOT NULL,
         name TEXT NOT NULL,
         description TEXT NOT NULL,
         inventory INTEGER NOT NULL,

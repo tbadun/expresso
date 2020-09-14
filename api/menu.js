@@ -1,10 +1,12 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
 const menuitemRouter = require('./menuitem');
+const bodyParser = require('body-parser');
 
 const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite')
 
 menuRouter = express.Router();
+menuRouter.use(bodyParser.json());
 menuRouter.use('/menu-items', menuitemRouter);
 
 menuRouter.get('/', (req,res,next) => {
