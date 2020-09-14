@@ -8,7 +8,6 @@ timesheetRouter = express.Router({mergeParams: true});
 timesheetRouter.use(bodyParser.json());
 
 timesheetRouter.get('/', (req,res,next) => {
-    console.log("########### GET EMPLOYEE ID: "+ req.params)
     db.all(`SELECT * FROM Timesheet WHERE employee_id = ${req.params.employeeId};`, (err,rows) => {
         if (err) {
             next(err);

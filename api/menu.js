@@ -5,9 +5,9 @@ const bodyParser = require('body-parser');
 
 const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite')
 
-menuRouter = express.Router();
+menuRouter = express.Router({mergeParams: true});
 menuRouter.use(bodyParser.json());
-menuRouter.use('/menu-items', menuitemRouter);
+menuRouter.use('/:menuId/menu-items', menuitemRouter);
 
 menuRouter.get('/', (req,res,next) => {
     db.all("SELECT * FROM Menu;", (err,rows) => {
@@ -85,21 +85,21 @@ menuRouter.put('/:menuId', checkRequirements, (req,res,next) => {
 });
 
 menuRouter.delete('/:menuId', (req,res,next) => {
-    // const id = req.params.menuId;
-    // const sql = `UPDATE Menu SET is_current_menu = 0 WHERE Menu.id = ${id};`;
-    // db.run(sql, function(err) {
-    //     if (err) {
-    //         next(err);
-    //     } else {
-    //         db.get(`SELECT * FROM Artist WHERE id = ${id}`, (err, row) => {
-    //             if (err) {
-    //                 next(err);
-    //             } else {
-    //                 res.status(204).json({ menu: row })
-    //             }
-    //         })
-    //     }
-    // });
+    db.get(`SELECT * FROM MenuItem WHERE menu_id = ${req.params.menuId}`, (err,row) => {
+        if (err) {
+            res.status(400).send(err);
+        } else if (!row) {
+            db.run(`DELETE FROM Menu WHERE id = ${req.params.menuId};`, function(err) {
+                if (err) {
+                    next(err);
+                } else {
+                    res.status(204).json(req.menu);
+                }
+            })
+        } else {
+            res.status(400).send("Cannot delete menu is menu items still exist.")
+        }
+    })
 });
 
 module.exports = menuRouter;
