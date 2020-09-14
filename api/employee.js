@@ -5,9 +5,9 @@ const bodyParser = require('body-parser');
 
 const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite')
 
-employeeRouter = express.Router();
+employeeRouter = express.Router({mergeParams: true});
 employeeRouter.use(bodyParser.json());
-employeeRouter.use('/timesheets', timesheetRouter);
+employeeRouter.use('/:employeeId/timesheets', timesheetRouter);
 
 employeeRouter.get('/', (req,res,next) => {
     db.all("SELECT * FROM Employee WHERE is_current_employee = 1;", (err,rows) => {
