@@ -65,7 +65,7 @@ menuitemRouter.param('menuItemId', (req,res,next,menuItemId) => {
 });
 
 menuitemRouter.put('/:menuItemId', checkRequirements, (req,res,next) => {
-    const menuItem= req.body.menuItem
+    const menuItem = req.body.menuItem;
     const sql = `UPDATE MenuItem SET name = $name, description = $description, inventory = $inventory, price = $price, menu_id = $menu_id WHERE MenuItem.id = $id;`;
     const params = {
         $id: req.params.menuItemId,
